@@ -313,7 +313,7 @@ module ActiveRecord
       Hash[calculated_data.map do |row|
         key = group_columns.map { |aliaz, col_name|
           column = calculated_data.column_types.fetch(aliaz) do
-            type_for(col_name)
+            db_type_for(col_name)
           end
           type_cast_calculated_value(row[aliaz], column)
         }
@@ -348,16 +348,12 @@ module ActiveRecord
 
     def db_type_for(field)
       field_name = field.respond_to?(:name) ? field.name.to_s : field.to_s.split('.').last
-      column = @klass.column_for(field_name)
-      column && @klass.connection.lookup_cast_type_from_column(column) || Type::Value.new
+      @klass.db_type_for_attribute(field_name)
     end
 
     def type_for(field)
-      # field_name = field.respond_to?(:name) ? field.name.to_s : field.to_s.split('.').last
-      # @klass.type_for_attribute(field_name)
       field_name = field.respond_to?(:name) ? field.name.to_s : field.to_s.split('.').last
-      column = @klass.column_for(field_name)
-      column && @klass.connection.lookup_cast_type_from_column(column) || Type::Value.new
+      @klass.type_for_attribute(field_name)
     end
 
     def type_cast_calculated_value(value, type, operation = nil)

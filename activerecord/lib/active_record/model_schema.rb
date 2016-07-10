@@ -275,6 +275,11 @@ module ActiveRecord
         @yaml_encoder ||= AttributeSet::YAMLEncoder.new(attribute_types)
       end
 
+      def db_type_for_attribute(attr_name)
+        db_col = column_for(attr_name)
+        db_col && connection.lookup_cast_type_from_column(db_col) || Type::Value.new
+      end
+
       # Returns the type of the attribute with the given name, after applying
       # all modifiers. This method is the only valid source of information for
       # anything related to the types of a model's attributes. This method will
