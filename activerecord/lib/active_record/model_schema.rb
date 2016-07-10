@@ -262,6 +262,10 @@ module ActiveRecord
         @columns ||= columns_hash.values
       end
 
+      def column_for(field_name)
+        columns.detect { |c| c.name == field_name }
+      end
+
       def attribute_types # :nodoc:
         load_schema
         @attribute_types ||= Hash.new(Type::Value.new)

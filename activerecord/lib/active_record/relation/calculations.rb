@@ -346,9 +346,18 @@ module ActiveRecord
       @klass.connection.table_alias_for(table_name)
     end
 
-    def type_for(field)
+    def db_type_for(field)
       field_name = field.respond_to?(:name) ? field.name.to_s : field.to_s.split('.').last
-      @klass.type_for_attribute(field_name)
+      column = @klass.column_for(field_name)
+      column && @klass.connection.lookup_cast_type_from_column(column) || Type::Value.new
+    end
+
+    def type_for(field)
+      # field_name = field.respond_to?(:name) ? field.name.to_s : field.to_s.split('.').last
+      # @klass.type_for_attribute(field_name)
+      field_name = field.respond_to?(:name) ? field.name.to_s : field.to_s.split('.').last
+      column = @klass.column_for(field_name)
+      column && @klass.connection.lookup_cast_type_from_column(column) || Type::Value.new
     end
 
     def type_cast_calculated_value(value, type, operation = nil)
