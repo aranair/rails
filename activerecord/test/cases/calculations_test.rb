@@ -340,6 +340,13 @@ class CalculationsTest < ActiveRecord::TestCase
     assert_equal 2, c['FIRM']
   end
 
+  def test_should_group_by_enum_and_return_non_typecasted_hash_key
+    c = Company.group(:size).count(:all)
+    assert_equal 2, c[0]
+    assert_equal 3, c[1]
+    assert_equal 6, c[2]
+  end
+
   def test_should_not_overshadow_enumerable_sum
     assert_equal 6, [1, 2, 3].sum(&:abs)
   end

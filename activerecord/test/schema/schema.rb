@@ -195,6 +195,7 @@ ActiveRecord::Schema.define do
     t.integer :client_of
     t.integer :rating, default: 1
     t.integer :account_id
+    t.integer :size
     t.string :description, default: ""
     t.index [:firm_id, :type, :rating], name: "company_index"
     t.index [:firm_id, :type], name: "company_partial_index", where: "rating > 10"
