@@ -346,14 +346,16 @@ module ActiveRecord
       @klass.connection.table_alias_for(table_name)
     end
 
+    def parsed_field_name(field)
+      field.respond_to?(:name) ? field.name.to_s : field.to_s.split('.').last
+    end
+
     def db_type_for(field)
-      field_name = field.respond_to?(:name) ? field.name.to_s : field.to_s.split('.').last
-      @klass.db_type_for_attribute(field_name)
+      @klass.db_type_for_attribute(parsed_field_name(field))
     end
 
     def type_for(field)
-      field_name = field.respond_to?(:name) ? field.name.to_s : field.to_s.split('.').last
-      @klass.type_for_attribute(field_name)
+      @klass.type_for_attribute(parsed_field_name(field))
     end
 
     def type_cast_calculated_value(value, type, operation = nil)

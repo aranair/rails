@@ -262,8 +262,8 @@ module ActiveRecord
         @columns ||= columns_hash.values
       end
 
-      def column_for(field_name)
-        columns.detect { |c| c.name == field_name }
+      def column_for(attr_name)
+        columns_hash[attr_name]
       end
 
       def attribute_types # :nodoc:
@@ -276,8 +276,8 @@ module ActiveRecord
       end
 
       def db_type_for_attribute(attr_name)
-        db_col = column_for(attr_name)
-        db_col && connection.lookup_cast_type_from_column(db_col) || Type::Value.new
+        column = column_for(attr_name)
+        column && connection.lookup_cast_type_from_column(column) || Type::Value.new
       end
 
       # Returns the type of the attribute with the given name, after applying
