@@ -1,6 +1,7 @@
 require "cases/helper"
 require 'models/club'
 require 'models/company'
+require 'models/book'
 require "models/contract"
 require 'models/edge'
 require 'models/organization'
@@ -341,10 +342,8 @@ class CalculationsTest < ActiveRecord::TestCase
   end
 
   def test_should_group_by_enum_and_return_non_typecasted_hash_key
-    c = Company.group(:size).count(:all)
-    assert_equal 2, c[0]
-    assert_equal 3, c[1]
-    assert_equal 6, c[2]
+    Book.create!(status: :published)
+    assert_equal({ "published" => 1 }, Book.group(:status).count)
   end
 
   def test_should_not_overshadow_enumerable_sum

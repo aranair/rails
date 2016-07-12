@@ -11,8 +11,6 @@ class Company < AbstractCompany
   has_many :contracts
   has_many :developers, :through => :contracts
 
-  enum size: [:small, :medium, :big]
-
   scope :of_first_firm, lambda {
     joins(:account => :firm).
     where('firms.id' => 1)
